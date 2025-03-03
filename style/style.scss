@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+$font: "Noto Sans", sans-serif;
+
+@mixin font-style($font-size, $font-color){
+    font-family: $font;
+    font-size: $font-size;
+    font-weight: 400;
+    color: $font-color;
+}
+
+.container{
+    max-width: 1040px;
+    margin: 0 auto;
+}
+
+body{
+    background-color: black;
+}
+
+
+.user-info{
+    background-color: #212121;
+    display: flex;
+    align-items: center;
+    padding: 10px 0 10px 50px;
+
+    .avatar-holder{
+        width: 80px;
+        height: 80px;
+        margin-right: 30px;
+
+        img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+
+    p{
+        @include font-style(30px, white)
+    }
+}
+
+main{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(53, 51, 51);
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.contact{
+    background-color: #212121;
+    display: flex;
+    align-items: center;
+    padding: 11px;
+
+    .avatar-holder{
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+
+        img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+
+    p{
+        @include font-style(30px, white)
+    }
+}
+
+.message-block{
+    background-image: url("../images/backgroundImg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    backdrop-filter: brightness(50%);
+    padding-bottom: 20px;
+}
+
+.message-part{
+    overflow-y: auto;
+    height: 77vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-part::-webkit-scrollbar {
+    display: none;
+}
+
+.message{
+    max-width: 75%;
+    width: max-content;
+    padding: 10px 15px;
+    border-radius: 18px;
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    p{
+        @include font-style(17px, white)
+    }
+
+    .time-text{
+        font-size: 12px;
+    }
+}
+
+.sender{
+    margin-left: 15px;
+    background-color: #919aa1;
+}
+
+.recipient{
+    margin-right: 15px;
+    margin-left: auto;
+    background-color: #8774e1;
+}
+
+form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+
+    input{
+        width: 88%;
+        height: 50px;
+        background-color: #212121;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 15px;
+        @include font-style(20px, #919aa1);
+    }
+
+    input:focus {
+        outline: none;
+      }
+
+    button{
+        background-color: transparent;
+        border: none;
+        transform: translate(-40px);
+
+        img{
+            width: 27px;
+            height: 27px;
+        }
+    }
+}
+
