@@ -2,7 +2,7 @@ const messageForm = document.querySelector('.message-input');
 const messagesPart = document.querySelector('.message-part');
 const input = document.querySelector('.input-message');
 
-const API_KEY = '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';
+const API_KEY = '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';
 
 let messageHolder = [];
 
