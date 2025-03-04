@@ -2,7 +2,7 @@ const messageForm = document.querySelector('.message-input');
 const messagesPart = document.querySelector('.message-part');
 const input = document.querySelector('.input-message');
 
-const API_KEY = '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';
+const API_KEY = '';
 
 let messageHolder = [];
 
@@ -29,8 +29,34 @@ class Message{
 }
 
 class UserMessage extends Message{
-    deliteMessage(){
+    deleteMessage(event){
+        const delButton = document.createElement('button');
+        delButton.innerText = 'Delete';
+        delButton.classList.add('del-button');
 
+        const windowWidth = window.innerWidth;
+
+        let posX = event.clientX;
+
+        console.log(windowWidth);
+        console.log(posX+55)
+        if (posX + 55 > windowWidth) {
+            posX = windowWidth - 150;
+        }
+
+        delButton.style.left = `${posX}px`;
+        delButton.style.top = `${event.clientY}px`;
+
+        document.body.appendChild(delButton);
+
+        delButton.addEventListener('click', () => {
+            //const {id} = event.target.parentElement;
+            console.log(event.target.parentElement);
+            messagesPart.removeChild(event.target.parentElement.parentElement);
+            console.log(delButton)
+            document.body.removeChild(delButton);
+            document.body.removeEventListener();
+        })
     }
 }
 
@@ -46,40 +72,15 @@ messageForm.addEventListener('submit', (event) => {
         messageHolder.push(userMessage);
         const aiResonse = getMessageAi(input.value);
         input.value = '';
-    }
-});
 
-messagesPart.addEventListener('click', (event) => {
-        event.preventDefault();
-        if(event.target.closest('.recipient')){
-            const delButton = document.createElement('button');
-            delButton.innerText = 'Delete';
-            delButton.classList.add('del-button');
-    
-            const windowWidth = window.innerWidth;
-    
-            let posX = event.clientX;
-    
-            console.log(windowWidth);
-            console.log(posX+55)
-            if (posX + 55 > windowWidth) {
-                posX = windowWidth - 150;
+        messagesPart.addEventListener('click', (event) => {
+            event.preventDefault();
+            if(event.target.closest('.recipient')){
+                userMessage.deleteMessage(event);
             }
-    
-            delButton.style.left = `${posX}px`;
-            delButton.style.top = `${event.clientY}px`;
-    
-            document.body.appendChild(delButton);
+    });
+    }
 
-            delButton.addEventListener('click', () => {
-                //const {id} = event.target.parentElement;
-                console.log(event.target.parentElement);
-                messagesPart.removeChild(event.target.parentElement.parentElement);
-                console.log(delButton)
-                document.body.removeChild(delButton);
-                document.body.removeEventListener();
-            })
-        }
 });
 
 async function getAIResponse(userMessage) {
