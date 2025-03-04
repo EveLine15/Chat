@@ -41,16 +41,19 @@ main {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgb(53, 51, 51);
+  background-color: #212121;
   display: grid;
   grid-template-columns: 30% 70%;
 }
 
 .contact {
-  background-color: #212121;
+  background-color: #8774e1;
   display: flex;
   align-items: center;
   padding: 11px;
+  border-radius: 15px;
+  margin: 5px;
+  transition: 0.2s;
 }
 .contact .avatar-holder {
   width: 80px;
@@ -67,6 +70,27 @@ main {
   font-size: 30px;
   font-weight: 400;
   color: white;
+}
+
+.not-active {
+  background-color: transparent;
+}
+
+.not-active:hover {
+  background-color: #2b2b2b;
+}
+
+.search-contact {
+  margin: 10px;
+}
+.search-contact input {
+  background-color: #181818;
+  border: 1px #2e2e2e solid;
+  border-radius: 50px;
+  transition: 0.2s;
+}
+.search-contact input:hover {
+  border-color: #646464;
 }
 
 .message-block {
@@ -152,4 +176,23 @@ form button {
 form button img {
   width: 27px;
   height: 27px;
+}
+
+.del-button {
+  background-color: #212121;
+  border: none;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 10px 15px;
+  border-radius: 15px;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: white;
+  position: absolute;
+  transition: 0.2s;
+}
+
+.del-button:hover {
+  background-color: #39393b;
 }/*# sourceMappingURL=style.css.map */

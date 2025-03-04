@@ -1,58 +1,85 @@
-const form = document.querySelector('form');
+const messageForm = document.querySelector('.message-input');
 const messagesPart = document.querySelector('.message-part');
 const input = document.querySelector('.input-message');
 
-const API_KEY = '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';
+const API_KEY = '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';
 
 let messageHolder = [];
 
 class Message{
-    constructor(id, sender, timestamp, text){
+    constructor(id, sender, timestamp, text, status){
         this.id = id;
         this.sender = sender;
         this.timestamp = timestamp;
         this.text = text;
+        this.status = status;
         this.render();
     }
 
     render(){
+        const div = document.createElement('div');
+        div.innerHTML = `
+        <div class="message ${this.status}" id="${this.id}">
+            <p>${this.text}</p>
+            <p class="time-text">${this.timestamp}</p>
+        </div>
+        `
+        messagesPart.appendChild(div);
     }
 }
 
 class UserMessage extends Message{
-    render(){
-        const div = document.createElement('div');
-        div.innerHTML = `
-        <div class="message recipient">
-            <p>${this.text}</p>
-            <p class="time-text">${this.timestamp}</p>
-        </div>
-        `
-        messagesPart.appendChild(div);
+    deliteMessage(){
+
     }
 }
 
 class SystemMessage extends Message{
-    render(){
-        const div = document.createElement('div');
-        div.innerHTML = `
-        <div class="message sender">
-            <p>${this.text}</p>
-            <p class="time-text">${this.timestamp}</p>
-        </div>
-        `
-        messagesPart.appendChild(div);
-    }
+    
 }
 
-form.addEventListener('submit', (event) => {
+messageForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if(input.value.trim()){
         const currentDate = new Date();
-        const userMessage = new UserMessage(messageHolder.length + 1, 'eve', `${currentDate.getHours()}:${currentDate.getMinutes()}`, input.value);
+        const userMessage = new UserMessage(messageHolder.length + 1, 'eve', `${currentDate.getHours()}:${currentDate.getMinutes()}`, input.value, 'recipient');
+        messageHolder.push(userMessage);
         const aiResonse = getMessageAi(input.value);
         input.value = '';
     }
+});
+
+messagesPart.addEventListener('click', (event) => {
+        event.preventDefault();
+        if(event.target.closest('.recipient')){
+            const delButton = document.createElement('button');
+            delButton.innerText = 'Delete';
+            delButton.classList.add('del-button');
+    
+            const windowWidth = window.innerWidth;
+    
+            let posX = event.clientX;
+    
+            console.log(windowWidth);
+            console.log(posX+55)
+            if (posX + 55 > windowWidth) {
+                posX = windowWidth - 150;
+            }
+    
+            delButton.style.left = `${posX}px`;
+            delButton.style.top = `${event.clientY}px`;
+    
+            document.body.appendChild(delButton);
+
+            delButton.addEventListener('click', () => {
+                //const {id} = event.target.parentElement;
+                console.log(event.target.parentElement);
+                messagesPart.removeChild(event.target.parentElement.parentElement);
+                console.log(delButton)
+                document.body.removeChild(delButton);
+                document.body.removeEventListener();
+            })
+        }
 });
 
 async function getAIResponse(userMessage) {
@@ -75,14 +102,13 @@ async function getAIResponse(userMessage) {
 
         if (response.ok) {
             const responseData = await response.json();
-            console.log(responseData)
             return responseData;
 
         } else {
             throw new Error(`Failed to fetch data from API. Status Code: ${response.status}`);
         }   
     } catch (error) {
-        console.error('Error fetching AI response:', error);
+        console.log('Error fetching AI response:', error);
     }
 
 }
@@ -92,8 +118,9 @@ async function getMessageAi(userMessage){
     try {
         let aiResponse = await getAIResponse(userMessage);
         if(aiResponse === '') aiResponse = "I can't answer right now";
-        const sysMessage = new SystemMessage(messageHolder.length + 1, 'system', `${currentDate.getHours()}:${currentDate.getMinutes()}`, aiResponse.choices[0].message.content);
-        
+        const sysMessage = new SystemMessage(messageHolder.length + 1, 'system', `${currentDate.getHours()}:${currentDate.getMinutes()}`, aiResponse.choices[0].message.content, 'sender');
+        messageHolder.push(sysMessage);
+
     } catch (error) {
         aiResponse = "I didn't get the response, try again";
     }
@@ -110,3 +137,22 @@ input.addEventListener("input", () => {
         input.value = input.value.trimStart();
     }
 });
+
+function scrollToBottom(container) {
+    container.scrollTop = container.scrollHeight;
+  }
+  
+  window.onload = function() {
+    const chatContainer = document.querySelector('.message-part');
+    scrollToBottom(chatContainer);
+  };
+  
+  const chatContainer = document.querySelector('.message-part');
+  const observer = new MutationObserver(() => {
+    scrollToBottom(chatContainer);
+  });
+  
+  observer.observe(chatContainer, {
+    childList: true, // наблюдаем за добавлением новых элементов
+    subtree: true,   // наблюдаем за элементами внутри контейнера
+  });
